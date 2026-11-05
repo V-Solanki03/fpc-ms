@@ -74,7 +74,7 @@ export async function syncCommitments(budgetMs = 20000) {
   return count;
 }
 
-export async function syncAll(totalBudgetMs = 200000) {
+export async function syncAll(totalBudgetMs = 45000) {
   if (!zohoConfigured()) throw new Error("Zoho is not connected yet. Add the ZOHO_* settings in Vercel and redeploy.");
   const t0 = Date.now();
   const org = await verifyOrg();

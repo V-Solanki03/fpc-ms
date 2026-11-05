@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { runJob } from "@/lib/jobs";
 
-export const maxDuration = 300;
+export const maxDuration = 60;
 export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest, { params }: { params: Promise<{ job: string }> }) {
   const secret = process.env.CRON_SECRET;

@@ -1,0 +1,46 @@
+# Scheduler for FPC-MS. Free, and works on any Vercel plan (Vercel's free plan only allows one imprecise run a day).
+# Setup (once): GitHub > repo Settings > Secrets and variables > Actions
+#   Secrets:   APP_URL (https://your-app.vercel.app, no trailing slash)   CRON_SECRET (same value as in Vercel)
+#   Variables: CRON_ENABLED = true
+# Times are UTC. IST = UTC + 5:30. GitHub may start a run a few minutes late.
+name: schedule
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # Zoho sync, every 15 minutes
+    - cron: "5 * * * *"      # linked Google Sheets, hourly
+    - cron: "0 4 * * 1-5"    # 09:30 IST  open today's commitments
+    - cron: "34 3 * * *"     # 09:04 IST  CRM hygiene scan
+    - cron: "40 12 * * 1-5"  # 18:10 IST  SDR daily report
+    - cron: "30 3 * * 6"     # 09:00 IST Saturday  FPC weekly report
+    - cron: "0 21 * * *"     # 02:30 IST  housekeeping
+  workflow_dispatch:
+    inputs:
+      job:
+        description: "Job to run now (e.g. sync.zoho)"
+        required: true
+jobs:
+  run:
+    if: ${{ vars.CRON_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call the app
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          SCHEDULE: ${{ github.event.schedule }}
+          MANUAL: ${{ github.event.inputs.job }}
+        run: |
+          set -euo pipefail
+          if [ -z "${APP_URL:-}" ] || [ -z "${CRON_SECRET:-}" ]; then echo "APP_URL or CRON_SECRET secret is missing"; exit 1; fi
+          case "$SCHEDULE" in
+            "*/15 * * * *") JOB=sync.zoho ;;
+            "5 * * * *") JOB=sync.sheets ;;
+            "0 4 * * 1-5") JOB=commitments.open_day ;;
+            "34 3 * * *") JOB=hygiene.scan ;;
+            "40 12 * * 1-5") JOB=report.sdr_daily ;;
+            "30 3 * * 6") JOB=report.fpc_weekly ;;
+            "0 21 * * *") JOB=ops.cleanup ;;
+            *) JOB="$MANUAL" ;;
+          esac
+          echo "Running $JOB"
+          curl -fsS --max-time 120 -H "Authorization: Bearer $CRON_SECRET" "$APP_URL/api/cron/$JOB"

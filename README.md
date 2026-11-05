@@ -27,13 +27,15 @@ Open **Integrations** and press **Load sample data** to explore with made-up dat
 - `src/lib/metrics.ts`: every metric definition, in one file, also shown under Settings
 - `src/lib/hygiene.ts`: the six CRM checks and the approval flow
 - `src/lib/importers.ts`: roster, offers, drive tracker and candidate imports (Excel, CSV, or a linked Google Sheet)
-- `src/lib/jobs.ts` + `vercel.json`: the scheduled jobs
+- `src/lib/jobs.ts` + `.github/workflows/schedule.yml`: the scheduled jobs
 - `src/lib/reports.ts`, `mail.ts`: report emails; saved as previews until `EMAIL_LIVE=true`
 - `src/lib/ai.ts`: optional Gemini summary (only team totals are sent)
 - `src/app/(app)/*`: the screens
 
 ## Guides
-`docs/DEPLOY.md` (Vercel) and `docs/ZOHO_SETUP.md` (connect the CRM).
+`docs/DEPLOY.md` (Supabase + Vercel + schedules), `docs/ZOHO_SETUP.md` (connect the CRM), `docs/ARCHITECTURE.md` (how it fits together).
+
+One-click start on Vercel: https://vercel.com/new/clone?repository-url=https://github.com/V-Solanki03/fpc-ms&env=DATABASE_URL,APP_PASSWORD,SESSION_SECRET,CRON_SECRET
 
 ## Safe defaults
 Zoho writes off, email in preview, AI off, app locked in production until `APP_PASSWORD` is set.

@@ -3,7 +3,7 @@ import { COOKIE, authRequired, sessionToken } from "@/lib/auth";
 
 export async function middleware(req: NextRequest) {
   const p = req.nextUrl.pathname;
-  if (p.startsWith("/api/cron/") || p.startsWith("/share/") || p === "/login") return NextResponse.next(); // cron has its own secret, share links have tokens
+  if (p.startsWith("/api/cron/") || p.startsWith("/share/") || p === "/login" || p === "/api/health") return NextResponse.next(); // cron has its own secret, share links have tokens
   if (!authRequired()) {
     if (process.env.VERCEL) return new NextResponse("FPC-MS is locked: set APP_PASSWORD in Vercel > Settings > Environment Variables, then redeploy.", { status: 503 });
     return NextResponse.next();

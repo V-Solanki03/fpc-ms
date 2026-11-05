@@ -11,8 +11,8 @@ export default async function Automations() {
   const tone = (s: string) => (s === "ok" ? "good" : s === "failed" ? "bad" : s === "running" ? "brand" : "muted");
   return (
     <>
-      <PageHeader title="Automations" sub="Every scheduled job in one place. Jobs run on Vercel Cron; Run now does the same thing on demand. Failures create a notification and an email to the admin address." />
-      <Notice tone="brand">Schedules are in <code>vercel.json</code> (times in UTC). Sub-daily schedules need the Vercel Pro plan; on the free plan, see docs/DEPLOY.md for the fallback.</Notice>
+      <PageHeader title="Automations" sub="Every scheduled job in one place. A free GitHub Actions workflow calls each job on schedule; Run now does the same thing on demand. Failures create a notification and an email to the admin address." />
+      <Notice tone="brand">Schedules live in <code>.github/workflows/schedule.yml</code> (times in UTC). If a job never shows a recent run, the workflow is not switched on yet: see docs/DEPLOY.md, step 5.</Notice>
       <Card pad={false} className="mb-5">
         <Table head={["Job", "Schedule (IST)", "Last run", "Result", ""]}>
           {JOBS.map((j) => { const l = L.get(j.name); return (

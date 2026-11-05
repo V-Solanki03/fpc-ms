@@ -16,7 +16,7 @@ type Job = { name: string; title: string; when: string; description: string; wee
 async function freshZoho() {
   if (!zohoConfigured()) return "Zoho not connected, used stored data";
   const [s] = await q("select max(last_sync) t from sync_state where entity='deals'");
-  if (!s?.t || Date.now() - new Date(s.t).getTime() > 2 * 3600000) return "refreshed: " + (await syncAll(120000));
+  if (!s?.t || Date.now() - new Date(s.t).getTime() > 2 * 3600000) return "refreshed: " + (await syncAll(45000));
   return "data fresh";
 }
 
