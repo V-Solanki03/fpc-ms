@@ -1,0 +1,21 @@
+@tailwind base; @tailwind components; @tailwind utilities;
+:root{
+  --bg:243 246 248; --panel:255 255 255; --ink:20 33 41; --muted:96 112 122; --line:218 226 231; --soft:238 243 246;
+  --brand:14 107 120; --good:31 122 77; --warn:176 112 8; --bad:176 50 40;
+  --font-sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root{
+  --bg:14 21 26; --panel:21 32 39; --ink:231 238 242; --muted:146 163 173; --line:38 54 63; --soft:28 41 49;
+  --brand:92 196 206; --good:123 211 157; --warn:230 184 87; --bad:240 154 124; color-scheme:dark; } }
+body{ background:rgb(var(--bg)); color:rgb(var(--ink)); font-family:var(--font-sans); -webkit-font-smoothing:antialiased; }
+@layer components{
+  .card{ @apply bg-panel border border-line rounded-xl; }
+  .btn{ @apply inline-flex items-center gap-2 rounded-lg border border-line bg-panel px-3 py-1.5 text-sm font-medium hover:bg-soft disabled:opacity-50 cursor-pointer; }
+  .btn-primary{ @apply bg-brand text-white border-brand hover:opacity-90 hover:bg-brand; }
+  .btn-danger{ @apply text-bad; }
+  .input{ @apply rounded-lg border border-line bg-panel px-3 py-1.5 text-sm w-full; }
+  .th{ @apply text-left text-[11px] font-semibold uppercase tracking-wide text-muted px-3 py-2 bg-soft border-b border-line whitespace-nowrap; }
+  .td{ @apply px-3 py-2 border-b border-line align-top text-sm; }
+  .num{ font-variant-numeric: tabular-nums; text-align:right; }
+}
+input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible{ outline:2px solid rgb(var(--brand)); outline-offset:1px; }

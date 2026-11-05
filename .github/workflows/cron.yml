@@ -1,0 +1,16 @@
+# Optional. Use this only if your Vercel plan is Hobby (free), which cannot run jobs more than once a day.
+# 1. Replace vercel.json with docs/vercel.hobby.json
+# 2. In GitHub > Settings > Secrets and variables > Actions, add APP_URL (https://your-app.vercel.app) and CRON_SECRET (same value as in Vercel)
+# 3. Delete the "if: false" line below.
+name: frequent-jobs
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+jobs:
+  sync:
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -fsS -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" "${{ secrets.APP_URL }}/api/cron/sync.zoho"
+      - run: curl -fsS -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" "${{ secrets.APP_URL }}/api/cron/sync.sheets"
